@@ -12,6 +12,11 @@ import (
 	"github.com/yuin/goldmark/text"
 )
 
+const (
+	InsertHead = "<meta charset='utf-8'><html><head></head><body><plait>"
+	InsertEnd  = "</plait></body></html>"
+)
+
 func MdToPMind(markdownStr string) (string, error) {
 	md := goldmark.New()
 	reader := text.NewReader([]byte(markdownStr))
@@ -58,8 +63,9 @@ func MdToPMind(markdownStr string) (string, error) {
 						},
 					},
 				},
-				Width:  int64(len(content)*8 + 20),
-				Height: 20,
+				Children: []entity.DatumChild{},
+				Width:    int64(len(content)*8 + 20),
+				Height:   20,
 			}
 			if root == nil {
 				root = &node
@@ -78,6 +84,7 @@ func MdToPMind(markdownStr string) (string, error) {
 			if len(stack) > 0 {
 				parent := stack[len(stack)-1]
 				parent.Children = append(parent.Children, node)
+				parent.Data = entity.Data{Topic: entity.Topic{Children: []entity.TopicChild{}}}
 				stack = append(stack, &parent.Children[len(parent.Children)-1])
 				currentLevel = indent
 			}
@@ -101,16 +108,15 @@ func MdToPMind(markdownStr string) (string, error) {
 				Layout:   "right",
 				IsRoot:   true,
 				Type:     "mindmap",
-				Points:   [][]int64{},
+				Points:   [][]int64{{0, 12}},
 			},
 		},
 	}
 
-	// jsonData, err := json.MarshalIndent(result, "", "  ")
 	jsonData, err := json.Marshal(result)
 	if err != nil {
 		return "", err
 	}
 
-	return string(jsonData), nil
+	return fmt.Sprintf("%s%s%s", InsertHead, string(jsonData), InsertEnd), nil
 }
