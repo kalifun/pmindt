@@ -44,7 +44,7 @@ func parseLines(lines []string, level int) (*entity.Datum, []string) {
 		Layout:   "right",
 		IsRoot:   true,
 		Type:     "mindmap",
-		Points:   [][]int64{{0, 12}},
+		Points:   [][]float32{{0, 12}},
 	}
 	lines = lines[1:]
 

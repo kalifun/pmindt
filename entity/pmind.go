@@ -27,7 +27,7 @@ type Datum struct {
 	RightNodeCount int64        `json:"rightNodeCount"`
 	IsRoot         bool         `json:"isRoot"`
 	Type           string       `json:"type"`
-	Points         [][]int64    `json:"points"`
+	Points         [][]float32  `json:"points"`
 }
 
 type DatumChild struct {

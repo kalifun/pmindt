@@ -26,6 +26,7 @@ func tip() {
 
 func init() {
 	rootCmd.AddCommand(toMind)
+	rootCmd.AddCommand(toMarkDown)
 }
 
 func ExecCmd() {
